@@ -6,8 +6,12 @@
   "permissions": ["activeTab", "scripting"],
   "host_permissions": [
     "https://*.upwork.com/*",
-    "https://*.linkedin.com/*"
+    "https://*.linkedin.com/*",
+    "https://search.globalstarxyz.com/*"
   ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
   "content_scripts": [
     {
       "matches": ["https://*.upwork.com/*"],
