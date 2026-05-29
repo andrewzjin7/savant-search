@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Savant Search - Developer Card Detector",
+  "version": "0.1.0",
+  "description": "Detects developer/freelancer cards on Upwork and LinkedIn and logs them to the console.",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": [
+    "https://*.upwork.com/*",
+    "https://*.linkedin.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://*.upwork.com/*"],
+      "js": ["src/common.js", "src/upwork.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*.linkedin.com/*"],
+      "js": ["src/common.js", "src/linkedin.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
