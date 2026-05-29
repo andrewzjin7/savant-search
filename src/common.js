@@ -16,6 +16,23 @@
     );
   };
 
+  // Forward a card to the background service worker, which POSTs it to the
+  // backend. We can't fetch directly from the content script (page CSP /
+  // cross-origin), so this is fire-and-forget — failures are logged by the
+  // worker and surfaced here, but never interrupt scanning.
+  const submit = (platform, card) => {
+    try {
+      chrome.runtime.sendMessage({ type: "submitCard", platform, card }, (res) => {
+        if (chrome.runtime.lastError) return; // worker asleep / context gone
+        if (res && !res.ok) {
+          console.warn("[Savant Search] backend rejected card:", res.error, card);
+        }
+      });
+    } catch (err) {
+      console.warn("[Savant Search] could not send card to backend:", err);
+    }
+  };
+
   // Trim, collapse whitespace, and return null for empty strings.
   const text = (el) => {
     if (!el) return null;
@@ -46,6 +63,7 @@
         if (seen.has(key)) continue;
         seen.add(key);
         log(platform, card);
+        submit(platform, card);
       }
     };
 
